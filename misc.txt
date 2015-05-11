@@ -1,0 +1,20 @@
+/*To configure libusb for arm architecture and cross compile c file*/
+Download libusb tarball
+tar xvf libusb-1.0.9.tar.bz2
+cd libusb-1.0.9/libusb
+CC='arm-linux-gnueabi-gcc'
+CROSS_COMPILE=arm-linux-gnueabi
+export CC CROSS_COMPILE
+./configure --host arm-linux
+make
+cd ../..
+arm-linux-gnueabi-gcc -pthread -static -o libcode libcode.c -L/home/wesleybrooks/uav/libusb-1.0.9/libusb/.libs/ -lusb-1.0
+
+/*To get files on android device and successfully run */
+//Sensor data files located at "/dev/iio:device#" where # is device dependednt. Accelerometer is 4 on dragon board
+adb shell "su -c 'stop'"  //stop android runtime, can't open sensor data files while runtime is going
+adb push <file> /data/local/tmp
+adb shell
+cd /data/local/tmp
+su  //become super user in order to interact with usb
+./<file>
